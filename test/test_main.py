@@ -1,6 +1,6 @@
 from urllib import response
 
-from todoApp import app
+from todoApp.main import app
 from fastapi.testclient import TestClient
 from fastapi import status
 

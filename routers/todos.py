@@ -2,8 +2,8 @@ from typing import Annotated
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException, Path
-from todoApp import Todos
-from todoApp import SessionLocal
+from todoApp.models import Todos
+from todoApp.database import SessionLocal
 from starlette import status
 
 router= APIRouter()

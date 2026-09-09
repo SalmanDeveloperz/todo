@@ -6,8 +6,8 @@ from pydantic import BaseModel
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from starlette import status
-from todoApp import SessionLocal
-from todoApp import Users
+from todoApp.database import SessionLocal
+from todoApp.models import Users
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer # OAuth is more secure then simple fastapi
 from jose import jwt, JWTError
 
