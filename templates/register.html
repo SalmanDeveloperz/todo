@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', path='/css/base.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', path='/css/bootstrap.css')}}">
+
+    <meta charset="UTF-8">
+    <title>TodoApp</title>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            Register
+        </div>
+        <div class="card-body">
+            <form id="register-form">
+                  <div class="form-row">
+                      <div class="form-group col-md-6">
+                          <label>Email</label>
+                          <input type="text" class="form-control" id="email" name="email" required placeholder="Email">
+                      </div>
+                      <div class="form-group col-md-6">
+                          <label>Username</label>
+                          <input type="text" class="form-control" id="username" name="username" required placeholder="Username">
+                      </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>First Name</label>
+                        <input type="text" class="form-control" id="firstName" name="firstName" required placeholder="First Name">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Last Name</label>
+                        <input type="text" class="form-control" id="lastName" name="lastName" required placeholder="Last Name">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Role</label>
+                        <input type="text" class="form-control" id="role" name="role" required placeholder="Role">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Phone Number</label>
+                        <input type="text" class="form-control" id="phoneNumber" name="phone_Number" required placeholder="Phone Number">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <label>Verify Password</label>
+                    <input type="password" class="form-control" id="password2" name="password" required placeholder="Password">
+                </div>
+                <button type="submit" class="btn btn-primary">Sign in</button>
+            </form>
+        </div>
+        <div class="card-footer text-muted">
+            <a href="/auth/login-page">Already have an account?</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
