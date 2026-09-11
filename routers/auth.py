@@ -1,7 +1,7 @@
 from datetime import timedelta, datetime, timezone
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
@@ -10,6 +10,7 @@ from todoApp.database import SessionLocal
 from todoApp.models import Users
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer # OAuth is more secure then simple fastapi
 from jose import jwt, JWTError
+from fastapi.templating import Jinja2Templates
 
 router= APIRouter(
     prefix='/auth',
@@ -45,6 +46,16 @@ def get_db():
 
 db_dependency= Annotated[Session, Depends(get_db)] #depends is dependency injection really need before we execute behind scenes
 
+templates= Jinja2Templates(directory="todoApp/templates")
+
+### Pages ###
+
+@router.get ("/login-page")
+def render_login_page(request: Request):
+    return templates.TemplateResponse(request=request, name="login.html")
+
+
+### Endpoints ###
 def authenticate_user(username:str, password:str, db):
     user= db.query(Users).filter(Users.username == username).first()
     if not user:
