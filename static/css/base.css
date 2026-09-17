@@ -48,6 +48,9 @@ h1, h2, .brand { font-family: "Fraunces", serif; font-weight: 600; letter-spacin
 .button-primary { background: var(--accent); color: white; margin-top: 4px; }
 .button-primary:hover { background: var(--accent-dark); }
 .button-dark { background: var(--ink); color: white; white-space: nowrap; }
+.button:disabled { cursor: wait; opacity: .55; transform: none; }
+.button-quiet { background: transparent; border: 1px solid var(--line); color: var(--ink); }
+.button-danger { background: var(--accent-dark); color: white; }
 .auth-switch { color: var(--muted); font-size: .87rem; margin-top: 30px; }
 .auth-switch a { font-weight: 700; text-underline-offset: 3px; }
 .form-message { color: var(--accent-dark); font-size: .84rem; min-height: 18px; }
@@ -98,5 +101,18 @@ h1, h2, .brand { font-family: "Fraunces", serif; font-weight: 600; letter-spacin
 .empty-mark { color: var(--accent); font-size: 2rem; margin-bottom: 14px; }
 .empty-state h2 { font-size: 1.35rem; }
 .empty-state p { color: var(--muted); font-size: .9rem; margin-top: 7px; }
+.toast { background: var(--ink); border-radius: 4px; bottom: 26px; box-shadow: 0 12px 30px rgba(36,35,31,.18); color: white; left: 50%; max-width: calc(100% - 40px); opacity: 0; padding: 13px 18px; pointer-events: none; position: fixed; transform: translate(-50%, 12px); transition: opacity .2s, transform .2s; z-index: 20; }
+.toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
+.toast.error { background: var(--accent-dark); }
+.dialog-backdrop { align-items: center; background: rgba(36,35,31,.42); display: flex; inset: 0; justify-content: center; padding: 20px; position: fixed; z-index: 10; }
+.dialog-backdrop[hidden] { display: none; }
+.dialog { background: var(--panel); box-shadow: 0 20px 60px rgba(36,35,31,.2); max-width: 500px; padding: 34px; position: relative; width: 100%; }
+.dialog-small { max-width: 410px; }
+.dialog h2 { font-size: 2rem; margin: 12px 0 8px; }
+.dialog .muted { margin: 0 0 24px; }
+.dialog textarea { background: transparent; border: 1px solid var(--line); color: var(--ink); font: inherit; outline: 0; padding: 13px 14px; resize: vertical; width: 100%; }
+.dialog textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(217,95,66,.12); }
+.dialog-close { background: transparent; border: 0; color: var(--muted); font-size: 1.7rem; line-height: 1; position: absolute; right: 18px; top: 16px; }
+.dialog-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 8px; }
 @media (max-width: 800px) { .auth-layout { display: block; } .auth-intro { min-height: 260px; padding: 26px 24px; } .auth-intro .intro-copy { margin-top: 55px; } .intro-copy h1 { font-size: 2.7rem; margin: 12px 0; } .intro-copy p:last-child, .intro-note { display: none; } .mobile-brand { display: block; } .auth-intro > .brand { display: none; } .workspace-grid { grid-template-columns: 1fr; } .side-panel { display: none; } }
 @media (max-width: 560px) { .topbar { padding: 22px 20px; } .user-greeting { display: none; } .dashboard { padding: 42px 20px 60px; } .dashboard-heading { align-items: start; margin-bottom: 38px; } .progress-ring { height: 88px; width: 88px; } .new-todo { align-items: stretch; flex-wrap: wrap; } .new-todo-fields { flex-basis: calc(100% - 50px); } .new-todo .button-dark { margin-left: 47px; width: calc(100% - 47px); } .list-toolbar { align-items: stretch; flex-direction: column; gap: 17px; } .search-field { max-width: none; } .todo-actions { opacity: 1; } .form-grid { grid-template-columns: 1fr; } }
