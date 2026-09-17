@@ -1,25 +1,30 @@
-{% include 'layout.html' %}
-
-<div class="container">
-    <div class="card">
-        <div class="card-header">
-            Login
+{% extends 'layout.html' %}
+{% block title %}Sign in | daymark{% endblock %}
+{% block body %}
+<main class="auth-layout">
+    <section class="auth-intro">
+        <a class="brand" href="/">daymark<span>.</span></a>
+        <div class="intro-copy">
+            <p class="eyebrow">A place for the day ahead</p>
+            <h1>Keep the important things close.</h1>
+            <p>Write things down, choose what matters, and move through the day with a little more room to think.</p>
         </div>
-        <div class="card-body">
-            <form id="loginForm">
-                <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" class="form-control" name="username" autocomplete="username" required>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="text" class="form-control" name="password" autocomplete="username" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Login</button>
+        <p class="intro-note"><span class="note-dot"></span>Simple lists. Steady progress.</p>
+    </section>
+    <section class="auth-panel">
+        <div class="auth-card">
+            <div class="mobile-brand"><a class="brand" href="/">daymark<span>.</span></a></div>
+            <p class="eyebrow">Welcome back</p>
+            <h2>Good to see you.</h2>
+            <p class="muted">Sign in to pick up where you left off.</p>
+            <form id="loginForm" class="stack-form">
+                <label>Username<input type="text" name="username" autocomplete="username" placeholder="Your username" required></label>
+                <label>Password<input type="password" name="password" autocomplete="current-password" placeholder="Your password" required></label>
+                <p id="loginMessage" class="form-message" role="alert"></p>
+                <button class="button button-primary" type="submit">Sign in <span aria-hidden="true">→</span></button>
             </form>
+            <p class="auth-switch">New here? <a href="/auth/register-page">Create an account</a></p>
         </div>
-        <div class="card-footer test-muted">
-            <a href="/auth/register-page"> Register?</a>
-        </div>
-    </div>
-</div>
+    </section>
+</main>
+{% endblock %}

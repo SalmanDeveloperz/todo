@@ -4,15 +4,22 @@ which is what our FASTAPI Application is going to be able to create a database a
 create a connection
 """
 
+import os
+
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base, sessionmaker
 
-# SQLALCHEMY_DATABASE_URL = 'sqlite:///./todos.db'  # for sqlite connection
-#SQLALCHEMY_DATABASE_URL = 'postgresql://postgres:salman123@localhost/TodoApplicationDatabase' #for postgreSQL Connection
-SQLALCHEMY_DATABASE_URL = 'mysql+pymysql://root:salman123@127.0.0.1:3306/TodoApplicationDatabase' #for MySQL connection
+SQLALCHEMY_DATABASE_URL = os.getenv(
+	"DATABASE_URL",
+	"mysql+pymysql://root:salman123@127.0.0.1:3306/TodoApplicationDatabase?charset=utf8mb4",
+)
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
+connect_args = {"check_same_thread": False} if SQLALCHEMY_DATABASE_URL.startswith("sqlite") else {}
+engine = create_engine(
+	SQLALCHEMY_DATABASE_URL,
+	connect_args=connect_args,
+	pool_pre_ping=True,
+)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

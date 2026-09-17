@@ -44,9 +44,9 @@ class Student:
 
 
 def test_person_initialization():
-    p= Student('Muhammad', 'Salman', 'CS', 22),
-    assert p.first_name =='Muhammad','first name should be Muhammad'
-    assert p.last_name == 'Salman', 'Second name should be Salman'
-    assert p.major == 'CS', 'Major should be computer Science'
-    assert p.years == 22
+    person = Student('Muhammad', 'Salman', 'CS', 22)
+    assert person.first_name == 'Muhammad', 'first name should be Muhammad'
+    assert person.last_name == 'Salman', 'Second name should be Salman'
+    assert person.major == 'CS', 'Major should be computer Science'
+    assert person.year == 22
 

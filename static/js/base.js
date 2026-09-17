@@ -1,251 +1,148 @@
-    // Add Todo JS
-    const todoForm = document.getElementById('todoForm');
-    if (todoForm) {
-        todoForm.addEventListener('submit', async function (event) {
-            event.preventDefault();
-
-            const form = event.target;
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
-
-            const payload = {
-                title: data.title,
-                description: data.description,
-                priority: parseInt(data.priority),
-                complete: false
-            };
-
-            try {
-                const response = await fetch('/todos/todo', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${getCookie('access_token')}`
-                    },
-                    body: JSON.stringify(payload)
-                });
-
-                if (response.ok) {
-                    form.reset(); // Clear the form
-                } else {
-                    // Handle error
-                    const errorData = await response.json();
-                    alert(`Error: ${errorData.detail}`);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred. Please try again.');
-            }
-        });
-    }
-
-    // Edit Todo JS
-    const editTodoForm = document.getElementById('editTodoForm');
-    if (editTodoForm) {
-        editTodoForm.addEventListener('submit', async function (event) {
-        event.preventDefault();
-        const form = event.target;
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-        var url = window.location.pathname;
-        const todoId = url.substring(url.lastIndexOf('/') + 1);
-
-        const payload = {
-            title: data.title,
-            description: data.description,
-            priority: parseInt(data.priority),
-            complete: data.complete === "on"
-        };
-
-        try {
-            const token = getCookie('access_token');
-            console.log(token)
-            if (!token) {
-                throw new Error('Authentication token not found');
-            }
-
-            console.log(`${todoId}`)
-
-            const response = await fetch(`/todos/todo/${todoId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(payload)
-            });
-
-            if (response.ok) {
-                window.location.href = '/todos/todo-page'; // Redirect to the todo page
-            } else {
-                // Handle error
-                const errorData = await response.json();
-                alert(`Error: ${errorData.detail}`);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred. Please try again.');
+const api = async (url, options = {}) => {
+    const response = await fetch(url, {
+        ...options,
+        headers: {
+            ...(options.body ? { "Content-Type": "application/json" } : {}),
+            ...(options.headers || {})
         }
     });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.detail || "Request failed");
+    return data;
+};
 
-        document.getElementById('deleteButton').addEventListener('click', async function () {
-            var url = window.location.pathname;
-            const todoId = url.substring(url.lastIndexOf('/') + 1);
+const setMessage = (id, message) => {
+    const element = document.getElementById(id);
+    if (element) element.textContent = message || "";
+};
 
-            try {
-                const token = getCookie('access_token');
-                if (!token) {
-                    throw new Error('Authentication token not found');
-                }
+const saveToken = (token) => {
+    document.cookie = `access_token=${encodeURIComponent(token)}; Path=/; Max-Age=3600; SameSite=Lax`;
+};
 
-                const response = await fetch(`/todos/todo/${todoId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
+const clearToken = () => {
+    document.cookie = "access_token=; Path=/; Max-Age=0; SameSite=Lax";
+};
 
-                if (response.ok) {
-                    // Handle success
-                    window.location.href = '/todos/todo-page'; // Redirect to the todo page
-                } else {
-                    // Handle error
-                    const errorData = await response.json();
-                    alert(`Error: ${errorData.detail}`);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred. Please try again.');
-            }
-        });
-
-        
-    }
-
-    // Login JS
-    const loginForm = document.getElementById('loginForm');
-    if (loginForm) {
-        loginForm.addEventListener('submit', async function (event) {
-            event.preventDefault();
-
-            const form = event.target;
-            const formData = new FormData(form);
-
-            const payload = new URLSearchParams();
-            for (const [key, value] of formData.entries()) {
-                payload.append(key, value);
-            }
-
-            try {
-                const response = await fetch('/auth/token', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: payload.toString()
-                });
-
-                if (response.ok) {
-                    // Handle success (e.g., redirect to dashboard)
-                    const data = await response.json();
-                    // Delete any cookies available
-                    logout();
-                    // Save token to cookie
-                    document.cookie = `access_token=${data.access_token}; path=/`;
-                    window.location.href = '/todos/todo-page'; // Change this to your desired redirect page
-                } else {
-                    // Handle error
-                    const errorData = await response.json();
-                    alert(`Error: ${errorData.detail}`);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred. Please try again.');
-            }
-        });
-    }
-
-    // Register JS
-    const registerForm = document.getElementById('registerForm');
-    if (registerForm) {
-        registerForm.addEventListener('submit', async function (event) {
-            event.preventDefault();
-
-            const form = event.target;
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
-
-            if (data.password !== data.password2) {
-                alert("Passwords do not match");
-                return;
-            }
-
-            const payload = {
-                email: data.email,
-                username: data.username,
-                first_name: data.firstname,
-                last_name: data.lastname,
-                role: data.role,
-                phone_number: data.phone_number,
-                password: data.password
-            };
-
-            try {
-                const response = await fetch('/auth', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
-                });
-
-                if (response.ok) {
-                    window.location.href = '/auth/login-page';
-                } else {
-                    // Handle error
-                    const errorData = await response.json();
-                    alert(`Error: ${errorData.message}`);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred. Please try again.');
-            }
-        });
-    }
-
-
-
-
-
-    // Helper function to get a cookie by name
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
+const loginForm = document.getElementById("loginForm");
+if (loginForm) {
+    loginForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const button = loginForm.querySelector("button[type=submit]");
+        button.disabled = true;
+        setMessage("loginMessage", "");
+        try {
+            const response = await fetch("/auth/token", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(new FormData(loginForm))
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(data.detail || "Incorrect username or password");
+            saveToken(data.access_token);
+            window.location.assign("/todos/todo-page");
+        } catch (error) {
+            setMessage("loginMessage", error.message);
+            button.disabled = false;
         }
-        return cookieValue;
+    });
+}
+
+const registerForm = document.getElementById("registerForm");
+if (registerForm) {
+    registerForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const values = Object.fromEntries(new FormData(registerForm));
+        const confirmation = values.password2;
+        delete values.password2;
+        if (values.password !== confirmation) {
+            setMessage("registerMessage", "Passwords do not match.");
+            return;
+        }
+        const button = registerForm.querySelector("button[type=submit]");
+        button.disabled = true;
+        setMessage("registerMessage", "");
+        try {
+            await api("/auth/", {
+                method: "POST",
+                body: JSON.stringify({ ...values, role: "member", phone_number: "" })
+            });
+            window.location.assign("/auth/login-page");
+        } catch (error) {
+            setMessage("registerMessage", error.message);
+            button.disabled = false;
+        }
+    });
+}
+
+const logoutButton = document.getElementById("logoutButton");
+if (logoutButton) {
+    logoutButton.addEventListener("click", () => {
+        clearToken();
+        window.location.assign("/auth/login-page");
+    });
+}
+
+const todoForm = document.getElementById("todoForm");
+if (todoForm) {
+    const list = document.getElementById("todoList");
+    let todos = [];
+    let filter = "all";
+
+    const render = () => {
+        const visible = todos.filter((todo) => filter === "all" || (filter === "done" ? todo.complete : !todo.complete));
+        list.innerHTML = visible.map((todo) => `<article class="todo-item ${todo.complete ? "is-done" : ""}" data-id="${todo.id}"><input class="todo-check" type="checkbox" ${todo.complete ? "checked" : ""}><div class="todo-copy"><div class="todo-title">${todo.title}</div><div class="todo-description">${todo.description}</div></div><div class="todo-actions"><button class="text-button delete-todo" type="button">Delete</button></div></article>`).join("");
+        document.getElementById("allCount").textContent = todos.length;
+        document.getElementById("openCount").textContent = todos.filter((todo) => !todo.complete).length;
+        document.getElementById("doneCount").textContent = todos.filter((todo) => todo.complete).length;
+        document.getElementById("progressValue").textContent = `${todos.length ? Math.round(todos.filter((todo) => todo.complete).length / todos.length * 100) : 0}%`;
+        document.getElementById("emptyState").hidden = visible.length > 0;
     };
 
-    function logout() {
-        // Get all cookies
-        const cookies = document.cookie.split(";");
-    
-        // Iterate through all cookies and delete each one
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i];
-            const eqPos = cookie.indexOf("=");
-            const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-            // Set the cookie's expiry date to a past date to delete it
-            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+    const load = async () => {
+        try {
+            const user = await api("/auth/me");
+            document.getElementById("userGreeting").textContent = `Hi, ${user.first_name}`;
+            todos = await api("/todos");
+            render();
+        } catch {
+            clearToken();
+            window.location.assign("/auth/login-page");
         }
-    
-        // Redirect to the login page
-        window.location.href = '/auth/login-page';
     };
+
+    todoForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const values = Object.fromEntries(new FormData(todoForm));
+        try {
+            todos.unshift(await api("/todos", { method: "POST", body: JSON.stringify({ ...values, complete: false }) }));
+            todoForm.reset();
+            render();
+        } catch (error) { window.alert(error.message); }
+    });
+
+    list.addEventListener("change", async (event) => {
+        if (!event.target.classList.contains("todo-check")) return;
+        const todo = todos.find((item) => item.id === Number(event.target.closest(".todo-item").dataset.id));
+        try {
+            const updated = await api(`/todos/${todo.id}`, { method: "PUT", body: JSON.stringify({ title: todo.title, description: todo.description, complete: event.target.checked }) });
+            todos = todos.map((item) => item.id === updated.id ? updated : item);
+            render();
+        } catch (error) { window.alert(error.message); }
+    });
+
+    list.addEventListener("click", async (event) => {
+        if (!event.target.classList.contains("delete-todo")) return;
+        const id = Number(event.target.closest(".todo-item").dataset.id);
+        try { await api(`/todos/${id}`, { method: "DELETE" }); todos = todos.filter((todo) => todo.id !== id); render(); }
+        catch (error) { window.alert(error.message); }
+    });
+
+    document.querySelectorAll(".filter-tab").forEach((button) => button.addEventListener("click", () => {
+        document.querySelectorAll(".filter-tab").forEach((item) => item.classList.remove("is-active"));
+        button.classList.add("is-active");
+        filter = button.dataset.filter;
+        render();
+    }));
+    load();
+}

@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', path='/css/base.css')}}">
-    <meta charset="UTF-8">
-    <title>Todo App Frontend</title>
-</head>
-<body>
-    <h1>
-        Add your ToDo to what ToDo🤣
-    </h1>
-</body>
-</html>
+{% extends 'layout.html' %}
+{% block title %}Today | daymark{% endblock %}
+{% block body %}
+<div class="app-shell">
+    <header class="topbar"><a class="brand" href="/todos/todo-page">daymark<span>.</span></a><div class="topbar-actions"><span id="userGreeting" class="user-greeting"></span><button id="logoutButton" class="icon-button" type="button" title="Sign out" aria-label="Sign out">↗</button></div></header>
+    <main class="dashboard">
+        <section class="dashboard-heading"><div><p class="eyebrow" id="todayLabel">YOUR DAY</p><h1>What matters today?</h1><p class="muted">Keep the list simple. Keep moving.</p></div><div class="progress-ring"><strong id="progressValue">0%</strong><span>complete</span></div></section>
+        <section class="workspace-grid"><div class="todo-column"><form id="todoForm" class="new-todo"><div class="new-todo-mark">+</div><div class="new-todo-fields"><input name="title" type="text" placeholder="Add a task" maxlength="80" required><input name="description" type="text" placeholder="What does it involve?" maxlength="240" required></div><button class="button button-dark" type="submit">Add task</button></form><div class="list-toolbar"><div class="filter-tabs" role="tablist" aria-label="Filter tasks"><button class="filter-tab is-active" data-filter="all" type="button">All <span id="allCount">0</span></button><button class="filter-tab" data-filter="active" type="button">Open <span id="openCount">0</span></button><button class="filter-tab" data-filter="done" type="button">Done <span id="doneCount">0</span></button></div><label class="search-field"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Find a task" aria-label="Search tasks"></label></div><div id="todoList" class="todo-list" aria-live="polite"></div><div id="emptyState" class="empty-state" hidden><div class="empty-mark">✦</div><h2 id="emptyTitle">Nothing here yet.</h2><p id="emptyCopy">Add one task to get started.</p></div></div><aside class="side-panel"><div class="side-panel-top"><span class="panel-kicker">A note for today</span><span class="spark">✳</span></div><p>Small steps still move the day forward.</p><div class="side-rule"></div><span class="panel-caption">DAYMARK / 01</span></aside></section>
+    </main>
+</div>
+{% endblock %}

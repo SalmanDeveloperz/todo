@@ -1,5 +1,3 @@
-from urllib import response
-
 from todoApp.main import app
 from fastapi.testclient import TestClient
 from fastapi import status
@@ -7,6 +5,6 @@ from fastapi import status
 client = TestClient(app)
 
 def test_return_health_check():
-    test_response= client.get("/healthy")
-    assert response.status_code == status.HTTP_200_OK
-    assert response.json() == {'status': 'Healthy'}
+    test_response = client.get("/healthy")
+    assert test_response.status_code == status.HTTP_200_OK
+    assert test_response.json() == {'status': 'Healthy'}

@@ -1,54 +1,33 @@
-{% include 'layout.html' %}
-<div class="container">
-    <div class="card">
-        <div class="card-header">
-            Register
+{% extends 'layout.html' %}
+{% block title %}Create an account | daymark{% endblock %}
+{% block body %}
+<main class="auth-layout auth-layout-register">
+    <section class="auth-intro">
+        <a class="brand" href="/">daymark<span>.</span></a>
+        <div class="intro-copy">
+            <p class="eyebrow">Start with one clear step</p>
+            <h1>Make room for what matters.</h1>
+            <p>A quiet place to collect your tasks and make progress you can see.</p>
         </div>
-        <div class="card-body">
-            <form id="register-form">
-                  <div class="form-row">
-                      <div class="form-group col-md-6">
-                          <label>Email</label>
-                          <input type="text" class="form-control" id="email" name="email" required placeholder="Email">
-                      </div>
-                      <div class="form-group col-md-6">
-                          <label>Username</label>
-                          <input type="text" class="form-control" id="username" name="username" required placeholder="Username">
-                      </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label>First Name</label>
-                        <input type="text" class="form-control" id="firstName" name="firstName" required placeholder="First Name">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Last Name</label>
-                        <input type="text" class="form-control" id="lastName" name="lastName" required placeholder="Last Name">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label>Role</label>
-                        <input type="text" class="form-control" id="role" name="role" required placeholder="Role">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Phone Number</label>
-                        <input type="text" class="form-control" id="phoneNumber" name="phone_Number" required placeholder="Phone Number">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" class="form-control" id="password" name="password" required placeholder="Password">
-                </div>
-                <div class="form-group">
-                    <label>Verify Password</label>
-                    <input type="password" class="form-control" id="password2" name="password" required placeholder="Password">
-                </div>
-                <button type="submit" class="btn btn-primary">Sign in</button>
+        <p class="intro-note"><span class="note-dot"></span>Made for real, busy days.</p>
+    </section>
+    <section class="auth-panel">
+        <div class="auth-card auth-card-wide">
+            <div class="mobile-brand"><a class="brand" href="/">daymark<span>.</span></a></div>
+            <p class="eyebrow">Set up your space</p>
+            <h2>Start with the basics.</h2>
+            <p class="muted">Create an account and make your first list.</p>
+            <form id="registerForm" class="stack-form">
+                <div class="form-grid"><label>First name<input type="text" name="first_name" autocomplete="given-name" required></label><label>Last name<input type="text" name="last_name" autocomplete="family-name" required></label></div>
+                <label>Email<input type="email" name="email" autocomplete="email" placeholder="you@example.com" required></label>
+                <label>Username<input type="text" name="username" autocomplete="username" required></label>
+                <label>Password<input type="password" name="password" autocomplete="new-password" minlength="8" required></label>
+                <label>Confirm password<input type="password" name="password2" autocomplete="new-password" minlength="8" required></label>
+                <p id="registerMessage" class="form-message" role="alert"></p>
+                <button class="button button-primary" type="submit">Create account <span aria-hidden="true">→</span></button>
             </form>
+            <p class="auth-switch">Already have an account? <a href="/auth/login-page">Sign in</a></p>
         </div>
-        <div class="card-footer text-muted">
-            <a href="/auth/login-page">Already have an account?</a>
-        </div>
-    </div>
-</div>
+    </section>
+</main>
+{% endblock %}
